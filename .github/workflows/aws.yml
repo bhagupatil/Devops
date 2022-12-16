@@ -2,12 +2,12 @@ name: CI/CD with Terraform
 on:
   push:
     branches:
-      - masters
+      - main
 
 env:
   AWS_ACCESS_KEY: ${{ secrets.AWS_ACCESS_KEY }}
   AWS_SECRET_ACCESS_ID: ${{ secrets.AWS_SECRET_ID }}
-  TF_STATE_BUCKET_NAME: ${{ secrets.ec2-example-app-terraform-state-bucket }}
+  AWS_TF_STATE_BUCKET_NAME: ${{ secrets.AWS_TF_STATE_BUCKET_NAME }}
   PRIVATE_SSH_KEY: ${{ secrets.AWS_SSH_KEY_PRIVATE }}
   PUBLIC_SSH_KEY: ${{ secrets.AWS_SSH_KEY_PUBLIC }}
   AWS_REGION: us-east-1
@@ -26,7 +26,7 @@ jobs:
           terraform_wrapper: false
       - name: Terraform init
         id: init
-        run: terraform init -backend-config="bucket=$AWS_BUCKET_NAME" -backend-config="region=us-east-1"
+        run: terraform init -backend-config="bucket=$AWS_TF_STATE_BUCKET_NAME" -backend-config="region=us-east-1"
         working-directory: ./terraform
       - name: Terraform Plan
         id: plan
